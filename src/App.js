@@ -1,11 +1,12 @@
 import './App.css';
 import { useState, useEffect } from 'react'
 
+const subscriptionKey = '';
 export default  function App() {
   const [inputValue, setInputValue] = useState('')
   const [resultToDisplay, setResultToDisplay] = useState([])
-  const subscriptionKey = '';
-  const userInput = encodeURI(inputValue);
+  
+  //const userInput = encodeURI(inputValue);
 
   const requestKeys = {
     method: 'GET',
@@ -15,17 +16,15 @@ export default  function App() {
   };
 
   const handleSearch = () => {
-    {/*console.log(setInputValue);*/}
-    console.log(inputValue);
     fetch(
-      `https://api.bing.microsoft.com/v7.0/search?mkt=en-NZ&q=${userInput}`,
+      `https://api.bing.microsoft.com/v7.0/custom/search?q=${inputValue}&customconfig=5e393488-268a-442a-9802-c3de0da2e02b&mkt=en-NZ`,
       requestKeys
     )
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        console.log(result.images.value);
-        setResultToDisplay(result.images.value);
+        console.log(result.data.value);
+        setResultToDisplay([...result.data.value]);
       });
   };
 
@@ -41,15 +40,16 @@ export default  function App() {
         className='input'
         placeholder="Search for Cars"
         onChange={(e) => setInputValue(e.target.value)}
+        value={inputValue}
       />
       
       <button onClick={handleSearch}>Search</button>
       
       <div className='result'>
-        {resultToDisplay?.map((e, index) => {
+        {resultToDisplay?.map((value, index) => {
           return (
             <div key={index}>
-              <a href={e.thumbnailUrl}><img src={e.thumbnailUrl} alt={e.name} /></a> 
+              <a href={value.url}><img src={value.thumbnailUrl}/></a> 
             </div>
           );
         })}

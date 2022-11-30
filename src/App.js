@@ -1,5 +1,5 @@
 import './App.css';
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 const subscriptionKey = '';
 export default  function App() {
@@ -23,14 +23,12 @@ export default  function App() {
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        console.log(result.data.value);
-        setResultToDisplay([...result.data.value]);
+        console.log(result.webPages.value);
+        setResultToDisplay([...result.webPages.value]);
       });
   };
 
-  useEffect(() => {
-    handleSearch();
-  }, []);
+  
 
   return (
     <div>
@@ -49,7 +47,7 @@ export default  function App() {
         {resultToDisplay?.map((value, index) => {
           return (
             <div key={index}>
-              <a href={value.url}><img src={value.thumbnailUrl}/></a> 
+              <div src={value.url} />
             </div>
           );
         })}
